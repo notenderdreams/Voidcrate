@@ -1,9 +1,19 @@
-export function App() {
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import HomePage from "./routes/home-page";
+import AssetPage from "./routes/management-page";
+import ProjectGridPage from "./routes/project-page";
+
+function App() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="font-medium">Hello World</div>
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/management" element={<AssetPage />} />
+        <Route path="/projects" element={<ProjectGridPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

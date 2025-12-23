@@ -1,13 +1,18 @@
 import { recentProjects } from "@/lib/mock";
 import { Button } from "@/components/ui/button";
-import { FolderOpen, Plus, Package, Settings } from "lucide-react";
+import {
+  UELogo,
+  PlusIcon,
+  PackageIcon,
+  SettingsIcon,
+} from "@/components/icons";
 import { getMostRecentProjects } from "@/lib/utils";
 
 const actions = [
-  { label: "Open Projects", icon: FolderOpen },
-  { label: "Add Crate", icon: Plus },
-  { label: "Browse Crates", icon: Package },
-  { label: "Settings", icon: Settings },
+  { label: "Open Projects", icon: UELogo },
+  { label: "Add Crate", icon: PlusIcon },
+  { label: "Browse Crates", icon: PackageIcon },
+  { label: "Settings", icon: SettingsIcon },
 ];
 
 export default function HomePage() {
@@ -62,7 +67,7 @@ export default function HomePage() {
               "
             >
               <div className="p-4 bg-neutral-900 rounded-md">
-                <Icon className=" text-neutral-100" strokeWidth={2} />
+                <Icon width={48} height={42} />
               </div>
               {label}
             </Button>

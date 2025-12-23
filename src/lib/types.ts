@@ -22,3 +22,9 @@ export interface Asset {
   thumbnail?: string;
   description?: string;
 }
+
+export interface IconProps {
+  width?: number;
+  height?: number;
+  color?: string;
+}

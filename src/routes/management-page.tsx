@@ -26,6 +26,8 @@ import {
 } from "lucide-react";
 import { assets as mockAssets } from "@/lib/mock";
 import type { Asset } from "@/lib/types";
+import Logo from "@/components/logo";
+import { getVersion } from "@/lib/version";
 
 const typeIconMap = {
   Models: Triangle,
@@ -46,11 +48,9 @@ export default function AssetManagementPage() {
         {/* Left Sidebar */}
         <Sidebar className="border-r border-neutral-800 bg-neutral-50">
           <SidebarHeader className="p-4 pb-2">
-            <div className="flex items-baseline gap-1 mb-6">
-              <span className="text-2xl font-light text-neutral-400">void</span>
-              <span className="text-2xl font-semibold text-neutral-300">
-                Crate
-              </span>
+            <div className="flex text-xs items-baseline justify-start  align-middle  mb-4">
+              <Logo />
+              <span className="text-neutral-500">v{getVersion()}</span>
             </div>
 
             <div className="relative">

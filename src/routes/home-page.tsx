@@ -56,12 +56,12 @@ export default function HomePage() {
                 w-full h-14
                 justify-start
                 bg-neutral-800 text-neutral-400
-                hover:bg-neutral-700
+                hover:bg-neutral-200
                 rounded-lg
-                gap-3 px-2
+                gap-3 px-1
               "
             >
-              <div className="p-3 bg-neutral-900 rounded-md">
+              <div className="p-4 bg-neutral-900 rounded-md">
                 <Icon className=" text-neutral-100" strokeWidth={2} />
               </div>
               {label}

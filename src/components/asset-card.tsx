@@ -27,8 +27,8 @@ export function AssetCard({
       onClick={() => onClick?.(asset)}
       className={`
         cursor-pointer
-        border
-        ${selected ? "border-gray-400 border-2" : "border-transparent"}
+        border-2
+        ${selected ? "border-gray-400" : "border-transparent"}
         hover:border-[#800000]
         transition-colors
         bg-black

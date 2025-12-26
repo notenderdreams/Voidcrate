@@ -41,7 +41,7 @@ const typeIconMap = {
 
 function AppHeader() {
   return (
-    <div className="flex text-xs items-baseline justify-start mb-4 gap-1">
+    <div className="flex text-xs items-baseline justify-start gap-1">
       <Logo />
       <span className="text-neutral-500">v{getVersion()}</span>
     </div>
@@ -66,7 +66,7 @@ function CategorySection() {
         <SidebarMenu>
           {categories.map(([label, color]) => (
             <SidebarMenuItem key={label}>
-              <SidebarMenuButton className="h-9 text-neutral-600 hover:bg-neutral-800/50 rounded-lg justify-start gap-3 px-3">
+              <SidebarMenuButton className="h-8 text-neutral-500 hover:bg-neutral-800/50 rounded-lg justify-start gap-3 px-3">
                 <div className={`h-3 w-3 rounded ${color}`} />
                 {label}
               </SidebarMenuButton>
@@ -78,43 +78,67 @@ function CategorySection() {
   );
 }
 
+type AssetType = "All" | "Models" | "Materials" | "Blueprints" | "Packs";
 
 export default function AssetManagementPage() {
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
+  const [activeType, setActiveType] = useState<AssetType>("All");
+
+  const filteredAssets =
+    activeType === "All"
+      ? assets
+      : assets.filter((a) => a.category === activeType);
 
   return (
     <SidebarProvider>
       <div className="h-screen w-screen bg-[#1A1A1A] text-neutral-200 flex overflow-hidden">
         {/* Left Sidebar ─────────────── */}
         <Sidebar className="border-r border-neutral-800 bg-neutral-50">
-          <SidebarHeader className="p-4 pb-2">
+          <SidebarHeader className="p-4 pb-2 ">
             <AppHeader />
-
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" />
-              <Input
-                placeholder="Search"
-                className="pl-9 bg-neutral-800 border-neutral-800 text-neutral-400 placeholder:text-neutral-500 h-10 rounded-lg"
-              />
-            </div>
           </SidebarHeader>
 
           <SidebarContent className="px-4">
             {/* Asset Types */}
             <SidebarGroup>
               <SidebarGroupLabel className="text-neutral-400 text-base font-normal mb-2 px-0">
-                All
+                Assets
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu className="gap-1">
-                  {Object.entries(typeIconMap).map(([label, Icon]) => (
-                    <SidebarMenuItem key={label}>
-                      <SidebarMenuButton className="h-10 text-neutral-400 hover:bg-neutral-700 rounded-lg gap-3 px-3">
-                        <Icon className="h-4 w-4" />
-                        {label}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
+                  {/* Main "All" item */}
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => setActiveType("All")}
+                      className={`
+                        h-8 rounded-lg gap-3 px-3
+                        ${activeType === "All" ? "bg-neutral-800 text-neutral-200" : "text-neutral-500 hover:bg-neutral-800/50"}
+                      `}
+                    >
+                      All
+                    </SidebarMenuButton>
+                    {/* Sub-items */}
+                    <SidebarMenu className="ml-4 mt-1 gap-1">
+                      {Object.keys(typeIconMap).map((label) => {
+                        const Icon =
+                          typeIconMap[label as keyof typeof typeIconMap];
+                        return (
+                          <SidebarMenuItem key={label}>
+                            <SidebarMenuButton
+                              onClick={() => setActiveType(label as AssetType)}
+                              className={`
+                                h-8 rounded-lg gap-3 px-3
+                                ${activeType === label ? "bg-neutral-800 text-neutral-200" : "text-neutral-500 hover:bg-neutral-800/50"}
+                              `}
+                            >
+                              {Icon && <Icon className="h-4 w-4" />}
+                              {label}
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        );
+                      })}
+                    </SidebarMenu>
+                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
@@ -139,7 +163,13 @@ export default function AssetManagementPage() {
         {/* Center Grid ──────────────── */}
         <main className="flex flex-col overflow-hidden flex-1">
           <header className="shrink-0 border-b border-neutral-800 px-6 py-4 flex items-center justify-between">
-            <h2 className="text-lg">Assets</h2>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" />
+              <Input
+                placeholder="Search"
+                className="pl-9  w-96 bg-neutral-800 border-neutral-800 text-neutral-400 placeholder:text-neutral-500 h-8 rounded-lg"
+              />
+            </div>
             <Button className="border-2 hover:border-[#800000]">
               <Plus className="h-4 w-4" />
               Add Asset
@@ -148,7 +178,7 @@ export default function AssetManagementPage() {
 
           <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {assets.map((asset) => (
+              {filteredAssets.map((asset) => (
                 <AssetCard
                   key={asset.id}
                   asset={asset}

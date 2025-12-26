@@ -188,6 +188,14 @@ export default function AssetManagementPage() {
               ))}
             </div>
           </div>
+
+          {/* Status Bar ──────────────── */}
+          <div className="px-6  bg-neutral-800 border-neutral-800 border-t-2  sticky bottom-0 ">
+            <span className="text-xs text-neutral-400 font-medium">
+              Project Untitled
+            </span>
+          </div>
+          {/* ──────────────── Status Bar */}
         </main>
         {/* ──────────────── Center Grid   */}
 

@@ -10,7 +10,7 @@ interface AssetDetailsPanelProps {
 export function AssetDetailsPanel({ asset, onClose }: AssetDetailsPanelProps) {
   if (!asset) {
     return (
-      <div className="text-neutral-500 text-center mt-10">
+      <div className="flex flex-1 items-center justify-center text-neutral-500">
         Select an asset to view details
       </div>
     );

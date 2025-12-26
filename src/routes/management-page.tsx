@@ -39,25 +39,59 @@ const typeIconMap = {
   Packs: Diamond,
 };
 
+function AppHeader() {
+  return (
+    <div className="flex text-xs items-baseline justify-start mb-4 gap-1">
+      <Logo />
+      <span className="text-neutral-500">v{getVersion()}</span>
+    </div>
+  );
+}
+
+function CategorySection() {
+  const categories = [
+    ["Favorites", "bg-red-800"],
+    ["Nature", "bg-green-600"],
+    ["Landscape", "bg-orange-600"],
+    ["Urban", "bg-blue-600"],
+  ] as const;
+
+  return (
+    <SidebarGroup className="mt-6">
+      <SidebarGroupLabel className="text-neutral-400 text-base font-normal mb-2 px-0">
+        Category
+      </SidebarGroupLabel>
+
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {categories.map(([label, color]) => (
+            <SidebarMenuItem key={label}>
+              <SidebarMenuButton className="h-9 text-neutral-600 hover:bg-neutral-800/50 rounded-lg justify-start gap-3 px-3">
+                <div className={`h-3 w-3 rounded ${color}`} />
+                {label}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+}
+
+
 export default function AssetManagementPage() {
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
 
   return (
     <SidebarProvider>
       <div className="h-screen w-screen bg-[#1A1A1A] text-neutral-200 flex overflow-hidden">
-        {/* Left Sidebar */}
+        {/* Left Sidebar ─────────────── */}
         <Sidebar className="border-r border-neutral-800 bg-neutral-50">
           <SidebarHeader className="p-4 pb-2">
-            <div className="flex text-xs items-baseline justify-start mb-4">
-              <Logo />
-              <span className="text-neutral-500">v{getVersion()}</span>
-            </div>
+            <AppHeader />
 
             <div className="relative">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500"
-                strokeWidth={2}
-              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" />
               <Input
                 placeholder="Search"
                 className="pl-9 bg-neutral-800 border-neutral-800 text-neutral-400 placeholder:text-neutral-500 h-10 rounded-lg"
@@ -66,44 +100,17 @@ export default function AssetManagementPage() {
           </SidebarHeader>
 
           <SidebarContent className="px-4">
-            {/* All Types */}
+            {/* Asset Types */}
             <SidebarGroup>
               <SidebarGroupLabel className="text-neutral-400 text-base font-normal mb-2 px-0">
                 All
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu className="gap-1">
-                  {Object.keys(typeIconMap).map((cat) => {
-                    const Icon = typeIconMap[cat as keyof typeof typeIconMap];
-                    return (
-                      <SidebarMenuItem key={cat}>
-                        <SidebarMenuButton className="h-10 text-neutral-400 hover:bg-neutral-700 rounded-lg justify-start gap-3 px-3">
-                          <Icon className="h-4 w-4" />
-                          {cat}
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    );
-                  })}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            {/* Categories */}
-            <SidebarGroup className="mt-6">
-              <SidebarGroupLabel className="text-neutral-400 text-base font-normal mb-2 px-0">
-                Category
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {[
-                    ["Favorites", "bg-red-800"],
-                    ["Nature", "bg-green-600"],
-                    ["Landscape", "bg-orange-600"],
-                    ["Urban", "bg-blue-600"],
-                  ].map(([label, color]) => (
+                  {Object.entries(typeIconMap).map(([label, Icon]) => (
                     <SidebarMenuItem key={label}>
-                      <SidebarMenuButton className="h-9 text-neutral-600 hover:bg-neutral-800/50 rounded-lg justify-start gap-3 px-3">
-                        <div className={`h-3 w-3 ${color}`} />
+                      <SidebarMenuButton className="h-10 text-neutral-400 hover:bg-neutral-700 rounded-lg gap-3 px-3">
+                        <Icon className="h-4 w-4" />
                         {label}
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -111,6 +118,10 @@ export default function AssetManagementPage() {
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
+
+            {/* ------------------------------ */}
+            <CategorySection />
+            {/* ------------------------------ */}
           </SidebarContent>
 
           <SidebarFooter className="p-4">
@@ -123,12 +134,13 @@ export default function AssetManagementPage() {
             </Button>
           </SidebarFooter>
         </Sidebar>
+        {/* ─────────────── Left Sidebar  */}
 
-        {/* Center Grid */}
+        {/* Center Grid ──────────────── */}
         <main className="flex flex-col overflow-hidden flex-1">
           <header className="shrink-0 border-b border-neutral-800 px-6 py-4 flex items-center justify-between">
             <h2 className="text-lg">Assets</h2>
-            <Button className="hover:bg-neutral-200 hover:border-[#800000] border-2">
+            <Button className="border-2 hover:border-[#800000]">
               <Plus className="h-4 w-4" />
               Add Asset
             </Button>
@@ -140,21 +152,23 @@ export default function AssetManagementPage() {
                 <AssetCard
                   key={asset.id}
                   asset={asset}
-                  selected={selectedAsset?.id === asset.id} // highlight selected
+                  selected={selectedAsset?.id === asset.id}
                   onClick={setSelectedAsset}
                 />
               ))}
             </div>
           </div>
         </main>
+        {/* ──────────────── Center Grid   */}
 
-        {/* Right Details Panel */}
-        <aside className="border-l border-neutral-800 p-4 flex flex-col gap-4 w-90">
+        {/* Right Details Panel ───────── */}
+        <aside className="border-l border-neutral-800 p-4 w-90 flex flex-col">
           <AssetDetailsPanel
             asset={selectedAsset}
             onClose={() => setSelectedAsset(null)}
           />
         </aside>
+        {/* ───────── Right Details Panel  */}
       </div>
     </SidebarProvider>
   );

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,10 +25,11 @@ import {
   Square,
   Diamond,
 } from "lucide-react";
-import { assets as mockAssets } from "@/lib/mock";
+import { assets } from "@/lib/mock";
 import type { Asset } from "@/lib/types";
 import Logo from "@/components/logo";
 import { getVersion } from "@/lib/version";
+import { AssetCard } from "@/components/asset-card";
 
 const typeIconMap = {
   Models: Triangle,
@@ -37,10 +39,7 @@ const typeIconMap = {
 };
 
 export default function AssetManagementPage() {
-  const renderTypeIcon = (category: Asset["category"]) => {
-    const Icon = typeIconMap[category] ?? Square;
-    return <Icon className="h-5 w-5 text-neutral-600" strokeWidth={2} />;
-  };
+  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
 
   return (
     <SidebarProvider>
@@ -48,11 +47,10 @@ export default function AssetManagementPage() {
         {/* Left Sidebar */}
         <Sidebar className="border-r border-neutral-800 bg-neutral-50">
           <SidebarHeader className="p-4 pb-2">
-            <div className="flex text-xs items-baseline justify-start  align-middle  mb-4">
+            <div className="flex text-xs items-baseline justify-start mb-4">
               <Logo />
               <span className="text-neutral-500">v{getVersion()}</span>
             </div>
-
             <div className="relative">
               <Search
                 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500"
@@ -86,6 +84,7 @@ export default function AssetManagementPage() {
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
+
             <SidebarGroup className="mt-6">
               <SidebarGroupLabel className="text-neutral-400 text-base font-normal mb-2 px-0">
                 Category
@@ -133,32 +132,12 @@ export default function AssetManagementPage() {
 
           <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {mockAssets.map((asset: Asset) => (
-                <div
+              {assets.map((asset) => (
+                <AssetCard
                   key={asset.id}
-                  className="border border-neutral-800 hover:border-[#800000] transition-colors bg-neutral-900 relative"
-                >
-                  <div className="aspect-square w-full overflow-hidden bg-black">
-                    {asset.thumbnail && (
-                      <img
-                        src={asset.thumbnail}
-                        alt={asset.name}
-                        className="w-full h-full object-cover object-top"
-                      />
-                    )}
-                  </div>
-                  <div className="px-2 py-2">
-                    <div className="text-sm leading-tight truncate">
-                      {asset.name}
-                    </div>
-                    <div className="text-xs text-neutral-400 mt-0.5">
-                      {asset.size} GB
-                    </div>
-                  </div>
-                  <div className="absolute bottom-2 right-2">
-                    {renderTypeIcon(asset.category)}
-                  </div>
-                </div>
+                  asset={asset}
+                  onClick={setSelectedAsset} // update selected asset
+                />
               ))}
             </div>
           </div>
@@ -166,30 +145,37 @@ export default function AssetManagementPage() {
 
         {/* Right Details Panel */}
         <aside className="border-l border-neutral-800 p-4 flex flex-col gap-4 w-90">
-          {mockAssets[0] && (
+          {selectedAsset ? (
             <>
               <div className="flex items-center justify-between">
-                <Button variant="ghost">← Minimize</Button>
+                <Button variant="ghost" onClick={() => setSelectedAsset(null)}>
+                  ← Close
+                </Button>
                 <Button variant="secondary">Edit</Button>
               </div>
 
               <div className="aspect-square overflow-hidden rounded-md">
                 <img
-                  src={mockAssets[0].thumbnail}
-                  alt={mockAssets[0].name}
+                  src={selectedAsset.thumbnail ?? "/placeholders/asset.png"}
+                  alt={selectedAsset.name}
                   className="h-full w-full object-cover object-top"
                 />
               </div>
 
               <div>
-                <div className="font-semibold">{mockAssets[0].name}</div>
+                <div className="font-semibold">{selectedAsset.name}</div>
                 <div className="text-xs text-neutral-500">
-                  {mockAssets[0].size} GB
+                  {selectedAsset.size} GB · {selectedAsset.category}
                 </div>
+                {selectedAsset.description && (
+                  <div className="text-xs text-neutral-400 mt-1">
+                    {selectedAsset.description}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {mockAssets[0].tags.map((tag) => (
+                {selectedAsset.tags.map((tag) => (
                   <Badge key={tag} variant="secondary">
                     {tag}
                   </Badge>
@@ -200,6 +186,10 @@ export default function AssetManagementPage() {
                 <Button className="w-full">Import</Button>
               </div>
             </>
+          ) : (
+            <div className="text-neutral-500 text-center mt-10">
+              Select an asset to view details
+            </div>
           )}
         </aside>
       </div>

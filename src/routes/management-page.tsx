@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Sidebar,
   SidebarContent,
@@ -25,11 +24,13 @@ import {
   Square,
   Diamond,
 } from "lucide-react";
+
 import { assets } from "@/lib/mock";
 import type { Asset } from "@/lib/types";
 import Logo from "@/components/logo";
 import { getVersion } from "@/lib/version";
 import { AssetCard } from "@/components/asset-card";
+import { AssetDetailsPanel } from "@/components/asset-details-panel";
 
 const typeIconMap = {
   Models: Triangle,
@@ -51,6 +52,7 @@ export default function AssetManagementPage() {
               <Logo />
               <span className="text-neutral-500">v{getVersion()}</span>
             </div>
+
             <div className="relative">
               <Search
                 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500"
@@ -64,6 +66,7 @@ export default function AssetManagementPage() {
           </SidebarHeader>
 
           <SidebarContent className="px-4">
+            {/* All Types */}
             <SidebarGroup>
               <SidebarGroupLabel className="text-neutral-400 text-base font-normal mb-2 px-0">
                 All
@@ -85,6 +88,7 @@ export default function AssetManagementPage() {
               </SidebarGroupContent>
             </SidebarGroup>
 
+            {/* Categories */}
             <SidebarGroup className="mt-6">
               <SidebarGroupLabel className="text-neutral-400 text-base font-normal mb-2 px-0">
                 Category
@@ -136,7 +140,8 @@ export default function AssetManagementPage() {
                 <AssetCard
                   key={asset.id}
                   asset={asset}
-                  onClick={setSelectedAsset} // update selected asset
+                  selected={selectedAsset?.id === asset.id} // highlight selected
+                  onClick={setSelectedAsset}
                 />
               ))}
             </div>
@@ -145,52 +150,10 @@ export default function AssetManagementPage() {
 
         {/* Right Details Panel */}
         <aside className="border-l border-neutral-800 p-4 flex flex-col gap-4 w-90">
-          {selectedAsset ? (
-            <>
-              <div className="flex items-center justify-between">
-                <Button variant="ghost" onClick={() => setSelectedAsset(null)}>
-                  ← Close
-                </Button>
-                <Button variant="secondary">Edit</Button>
-              </div>
-
-              <div className="aspect-square overflow-hidden rounded-md">
-                <img
-                  src={selectedAsset.thumbnail ?? "/placeholders/asset.png"}
-                  alt={selectedAsset.name}
-                  className="h-full w-full object-cover object-top"
-                />
-              </div>
-
-              <div>
-                <div className="font-semibold">{selectedAsset.name}</div>
-                <div className="text-xs text-neutral-500">
-                  {selectedAsset.size} GB · {selectedAsset.category}
-                </div>
-                {selectedAsset.description && (
-                  <div className="text-xs text-neutral-400 mt-1">
-                    {selectedAsset.description}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {selectedAsset.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-
-              <div className="mt-auto">
-                <Button className="w-full">Import</Button>
-              </div>
-            </>
-          ) : (
-            <div className="text-neutral-500 text-center mt-10">
-              Select an asset to view details
-            </div>
-          )}
+          <AssetDetailsPanel
+            asset={selectedAsset}
+            onClose={() => setSelectedAsset(null)}
+          />
         </aside>
       </div>
     </SidebarProvider>

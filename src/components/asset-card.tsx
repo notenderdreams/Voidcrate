@@ -3,6 +3,7 @@ import { Triangle, Circle, Square, Diamond } from "lucide-react";
 
 interface AssetCardProps {
   asset: Asset;
+  selected?: boolean;
   onClick?: (asset: Asset) => void;
 }
 
@@ -13,21 +14,26 @@ const typeIconMap = {
   Packs: Diamond,
 };
 
-export function AssetCard({ asset, onClick }: AssetCardProps) {
+export function AssetCard({
+  asset,
+  selected = false,
+  onClick,
+}: AssetCardProps) {
   const Icon = typeIconMap[asset.category] ?? Square;
   const thumbnailSrc = asset.thumbnail ?? "/placeholders/asset.png";
 
   return (
     <div
       onClick={() => onClick?.(asset)}
-      className="
+      className={`
         cursor-pointer
-        border border-transparent
+        border
+        ${selected ? "border-gray-400 border-2" : "border-transparent"}
         hover:border-[#800000]
         transition-colors
         bg-black
         rounded-md
-      "
+      `}
     >
       {/* Thumbnail */}
       <div className="aspect-square w-full overflow-hidden bg-black rounded-t-md">

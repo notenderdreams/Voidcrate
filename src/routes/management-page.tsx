@@ -14,7 +14,6 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
 } from "@/components/ui/sidebar";
-
 import {
   Search,
   Plus,
@@ -26,18 +25,16 @@ import {
 } from "lucide-react";
 
 import { assets } from "@/lib/mock";
-import type { Asset } from "@/lib/types";
+import type {
+  Asset,
+  AssetType,
+  AssetTypeSectionProps,
+  CategorySectionProps,
+} from "@/lib/types";
 import Logo from "@/components/logo";
 import { getVersion } from "@/lib/version";
 import { AssetCard } from "@/components/asset-card";
 import { AssetDetailsPanel } from "@/components/asset-details-panel";
-
-const typeIconMap = {
-  Models: Triangle,
-  Materials: Circle,
-  Blueprints: Square,
-  Packs: Diamond,
-};
 
 function AppHeader() {
   return (
@@ -48,7 +45,68 @@ function AppHeader() {
   );
 }
 
-function CategorySection() {
+function AssetTypeSection({ activeType, onSelectType }: AssetTypeSectionProps) {
+  const typeIconMap = {
+    Models: Triangle,
+    Materials: Circle,
+    Blueprints: Square,
+    Packs: Diamond,
+  };
+
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel className="text-neutral-400 text-base font-normal mb-2 px-0">
+        Assets
+      </SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu className="gap-1">
+          {/* Main "All" item */}
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => onSelectType("All")}
+              className={`
+                h-8 rounded-lg gap-3 px-3
+                ${activeType === "All" ? "bg-neutral-800 text-neutral-200" : "text-neutral-500 hover:bg-neutral-800/50"}
+              `}
+            >
+              All
+            </SidebarMenuButton>
+
+            {/* Sub-items */}
+            <SidebarMenu className="ml-4 mt-1 gap-1">
+              {Object.keys(typeIconMap).map((label) => {
+                const Icon = typeIconMap[label as keyof typeof typeIconMap];
+                return (
+                  <SidebarMenuItem key={label}>
+                    <SidebarMenuButton
+                      onClick={() =>
+                        onSelectType(
+                          activeType === label ? "All" : (label as AssetType),
+                        )
+                      }
+                      className={`
+                        h-8 rounded-lg gap-3 px-3
+                        ${activeType === label ? "bg-neutral-800 text-neutral-200" : "text-neutral-500 hover:bg-neutral-800/50"}
+                      `}
+                    >
+                      {Icon && <Icon className="h-4 w-4" />}
+                      {label}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+}
+
+function CategorySection({
+  selectedCategory,
+  onSelectCategory,
+}: CategorySectionProps) {
   const categories = [
     ["Favorites", "bg-red-800"],
     ["Nature", "bg-green-600"],
@@ -66,7 +124,15 @@ function CategorySection() {
         <SidebarMenu>
           {categories.map(([label, color]) => (
             <SidebarMenuItem key={label}>
-              <SidebarMenuButton className="h-8 text-neutral-500 hover:bg-neutral-800/50 rounded-lg justify-start gap-3 px-3">
+              <SidebarMenuButton
+                onClick={() =>
+                  onSelectCategory(selectedCategory === label ? null : label)
+                }
+                className={`
+                  h-8 text-neutral-500 hover:bg-neutral-800/50 rounded-lg justify-start gap-3 px-3
+                  ${selectedCategory === label ? "bg-neutral-800 text-neutral-200" : ""}
+                `}
+              >
                 <div className={`h-3 w-3 rounded ${color}`} />
                 {label}
               </SidebarMenuButton>
@@ -78,16 +144,21 @@ function CategorySection() {
   );
 }
 
-type AssetType = "All" | "Models" | "Materials" | "Blueprints" | "Packs";
-
 export default function AssetManagementPage() {
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
   const [activeType, setActiveType] = useState<AssetType>("All");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredAssets =
-    activeType === "All"
-      ? assets
-      : assets.filter((a) => a.category === activeType);
+  const filteredAssets = assets.filter((a) => {
+    const typeMatch = activeType === "All" || a.category === activeType;
+    const categoryMatch = !activeCategory || a.tags?.includes(activeCategory);
+    const searchMatch =
+      !searchQuery ||
+      a.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      a.tags?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+    return typeMatch && categoryMatch && searchMatch;
+  });
 
   return (
     <SidebarProvider>
@@ -99,53 +170,17 @@ export default function AssetManagementPage() {
           </SidebarHeader>
 
           <SidebarContent className="px-4">
-            {/* Asset Types */}
-            <SidebarGroup>
-              <SidebarGroupLabel className="text-neutral-400 text-base font-normal mb-2 px-0">
-                Assets
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu className="gap-1">
-                  {/* Main "All" item */}
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      onClick={() => setActiveType("All")}
-                      className={`
-                        h-8 rounded-lg gap-3 px-3
-                        ${activeType === "All" ? "bg-neutral-800 text-neutral-200" : "text-neutral-500 hover:bg-neutral-800/50"}
-                      `}
-                    >
-                      All
-                    </SidebarMenuButton>
-                    {/* Sub-items */}
-                    <SidebarMenu className="ml-4 mt-1 gap-1">
-                      {Object.keys(typeIconMap).map((label) => {
-                        const Icon =
-                          typeIconMap[label as keyof typeof typeIconMap];
-                        return (
-                          <SidebarMenuItem key={label}>
-                            <SidebarMenuButton
-                              onClick={() => setActiveType(label as AssetType)}
-                              className={`
-                                h-8 rounded-lg gap-3 px-3
-                                ${activeType === label ? "bg-neutral-800 text-neutral-200" : "text-neutral-500 hover:bg-neutral-800/50"}
-                              `}
-                            >
-                              {Icon && <Icon className="h-4 w-4" />}
-                              {label}
-                            </SidebarMenuButton>
-                          </SidebarMenuItem>
-                        );
-                      })}
-                    </SidebarMenu>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            {/* ------------------------------ */}
-            <CategorySection />
-            {/* ------------------------------ */}
+            {/* ------------------------------------ */}
+            <AssetTypeSection
+              activeType={activeType}
+              onSelectType={setActiveType}
+            />
+            {/* ------------------------------------ */}
+            <CategorySection
+              selectedCategory={activeCategory}
+              onSelectCategory={setActiveCategory}
+            />
+            {/* ------------------------------------ */}
           </SidebarContent>
 
           <SidebarFooter className="p-4">
@@ -167,6 +202,8 @@ export default function AssetManagementPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" />
               <Input
                 placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9  w-96 bg-neutral-800 border-neutral-800 text-neutral-400 placeholder:text-neutral-500 h-8 rounded-lg"
               />
             </div>

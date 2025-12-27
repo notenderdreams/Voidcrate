@@ -45,10 +45,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
 
         <div className="text-xs text-neutral-500 truncate">
-          <span className="font-semibold text-neutral-400">
-            {project.engineVersion}
-          </span>{" "}
-          · {project.path}
+          {project.engineVersion ? (
+            <>
+              <span className="font-semibold text-neutral-400">
+                {project.engineVersion}
+              </span>{" "}
+              · {project.path}
+            </>
+          ) : (
+            project.path
+          )}
         </div>
       </div>
     </div>

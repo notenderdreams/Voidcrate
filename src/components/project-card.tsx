@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
+import { selectedProjectAtom } from "@/lib/store";
 import type { Project } from "@/lib/types";
 
 interface ProjectCardProps {
@@ -7,12 +9,17 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const navigate = useNavigate();
+  const [, setSelectedProject] = useAtom(selectedProjectAtom);
 
+  const handleClick = () => {
+    setSelectedProject(project);
+    navigate("/management/");
+  };
   const thumbnailSrc = project.thumbnail ?? "/placeholders/project.png"; // TODO default thumbnail
 
   return (
     <div
-      onClick={() => navigate(`/management/${project.path}`)}
+      onClick={handleClick}
       className="
         cursor-pointer
         border border-transparent

@@ -35,10 +35,17 @@ import Logo from "@/components/logo";
 import { getVersion } from "@/lib/version";
 import { AssetCard } from "@/components/asset-card";
 import { AssetDetailsPanel } from "@/components/asset-details-panel";
+import { useAtom } from "jotai";
+import { selectedProjectAtom } from "@/lib/store";
+import { useNavigate } from "react-router-dom";
+
 
 function AppHeader() {
+  const navigate = useNavigate();
   return (
-    <div className="flex text-xs items-baseline justify-start gap-1">
+    <div 
+      onClick={()=>{navigate("/");}}
+      className="flex text-xs items-baseline justify-start gap-1 hover:bg-neutral-800 rounded-md">
       <Logo />
       <span className="text-neutral-500">v{getVersion()}</span>
     </div>
@@ -149,6 +156,7 @@ export default function AssetManagementPage() {
   const [activeType, setActiveType] = useState<AssetType>("All");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [project] = useAtom(selectedProjectAtom);
 
   const filteredAssets = assets.filter((a) => {
     const typeMatch = activeType === "All" || a.category === activeType;
@@ -229,7 +237,7 @@ export default function AssetManagementPage() {
           {/* Status Bar ──────────────── */}
           <div className="px-6  bg-neutral-800 border-neutral-800 border-t-2  sticky bottom-0 ">
             <span className="text-xs text-neutral-400 font-medium">
-              Project Untitled
+              {project?.name ?? "No project selected"}
             </span>
           </div>
           {/* ──────────────── Status Bar */}

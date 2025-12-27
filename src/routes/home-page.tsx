@@ -7,6 +7,9 @@ import {
   SettingsIcon,
 } from "@/components/icons";
 import { getMostRecentProjects } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
+import { selectedProjectAtom } from "@/lib/store";
 
 const actions = [
   { label: "Open Projects", icon: UELogo },
@@ -16,6 +19,9 @@ const actions = [
 ];
 
 export default function HomePage() {
+  const navigate = useNavigate();
+  const [, setSelectedProject] = useAtom(selectedProjectAtom);
+
   const mostRecentProjects = getMostRecentProjects(recentProjects);
 
   return (
@@ -37,6 +43,10 @@ export default function HomePage() {
                 rounded-lg
                 px-4
               "
+              onClick={() => {
+                setSelectedProject(project);
+                navigate("/management/");
+              }}
             >
               <div className="flex flex-col overflow-hidden text-left">
                 <span className="text-sm truncate">{project.name}</span>

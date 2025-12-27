@@ -4,7 +4,6 @@ export interface Project {
   path: string;
   engineVersion: string;
   lastOpened: string;
-  createdAt: string;
   thumbnail?: string;
 }
 

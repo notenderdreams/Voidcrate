@@ -17,7 +17,7 @@ import {
 import {
   Search,
   Plus,
-  Settings,
+  ChevronLeft,
   Triangle,
   Circle,
   Square,
@@ -38,14 +38,17 @@ import { AssetDetailsPanel } from "@/components/asset-details-panel";
 import { useAtom } from "jotai";
 import { selectedProjectAtom } from "@/lib/store";
 import { useNavigate } from "react-router-dom";
-
+import { UELogo } from "@/components/icons";
 
 function AppHeader() {
   const navigate = useNavigate();
   return (
-    <div 
-      onClick={()=>{navigate("/");}}
-      className="flex text-xs items-baseline justify-start gap-1 hover:bg-neutral-800 rounded-md">
+    <div
+      onClick={() => {
+        navigate("/");
+      }}
+      className="flex text-xs items-baseline justify-start gap-1 hover:bg-neutral-800 rounded-md"
+    >
       <Logo />
       <span className="text-neutral-500">v{getVersion()}</span>
     </div>
@@ -152,11 +155,13 @@ function CategorySection({
 }
 
 export default function AssetManagementPage() {
+  const navigate = useNavigate();
+
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
   const [activeType, setActiveType] = useState<AssetType>("All");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [project] = useAtom(selectedProjectAtom);
+  const [project, setSelectedProject] = useAtom(selectedProjectAtom);
 
   const filteredAssets = assets.filter((a) => {
     const typeMatch = activeType === "All" || a.category === activeType;
@@ -194,10 +199,14 @@ export default function AssetManagementPage() {
           <SidebarFooter className="p-4">
             <Button
               variant="ghost"
-              className="w-full justify-start h-12 bg-neutral-800 text-neutral-400 hover:bg-neutral-700 rounded-lg gap-3"
+              className="justify-center h-12  bg-neutral-800 text-neutral-400 hover:bg-neutral-700 rounded-lg gap-2"
+              onClick={() => {
+                setSelectedProject(null);
+                navigate("/projects");
+              }}
             >
-              <Settings className="h-5 w-5" />
-              Settings
+              <ChevronLeft />
+              Return to Projects
             </Button>
           </SidebarFooter>
         </Sidebar>
@@ -215,10 +224,21 @@ export default function AssetManagementPage() {
                 className="pl-9  w-96 bg-neutral-800 border-neutral-800 text-neutral-400 placeholder:text-neutral-500 h-8 rounded-lg"
               />
             </div>
-            <Button className="border-2 hover:border-[#800000]">
-              <Plus className="h-4 w-4" />
-              Add Asset
-            </Button>
+            <div className="flex gap-2  ">
+              <Button
+                className="bg-blue-600 border-2 hover:border-blue-600 active:bg-blue-950"
+                onClick={() => {
+                  console.log("Open Engine Called");
+                }}
+              >
+                <UELogo color="#fff" />
+                <span className="text-white">Open Engine</span>
+              </Button>
+              <Button className="border-2 hover:border-[#800000] active:bg-neutral-400">
+                <Plus className="h-4 w-4" />
+                Add Asset
+              </Button>
+            </div>
           </header>
 
           <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">

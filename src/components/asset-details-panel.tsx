@@ -25,7 +25,7 @@ export function AssetDetailsPanel({ asset, onClose }: AssetDetailsPanelProps) {
         <Button variant="secondary">Edit</Button>
       </div>
 
-      <div className="aspect-square overflow-hidden rounded-md">
+      <div className="aspect-square overflow-hidden rounded-md border-3 border-neutral-600">
         <img
           src={asset.thumbnail ?? "/placeholders/asset.png"}
           alt={asset.name}
@@ -33,10 +33,12 @@ export function AssetDetailsPanel({ asset, onClose }: AssetDetailsPanelProps) {
         />
       </div>
 
-      <div>
-        <div className="font-semibold">{asset.name}</div>
-        <div className="text-xs text-neutral-500">
-          {asset.size} GB · {asset.category}
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between items-center">
+          <div className="font-semibold">{asset.name}</div>
+          <div className="text-xs text-neutral-500">
+            {asset.category} · {asset.size} GB
+          </div>
         </div>
         {asset.description && (
           <div className="text-xs text-neutral-400 mt-1">
@@ -53,8 +55,20 @@ export function AssetDetailsPanel({ asset, onClose }: AssetDetailsPanelProps) {
         ))}
       </div>
 
+      {/*!TODO: Proper status and button handling */}
       <div className="mt-auto">
-        <Button className="w-full">Import</Button>
+        <div className="flex flex-col gap-2 ">
+          <div className="text-xs">
+            <span>Status: </span>
+            <span className="text-neutral-400">Not Imported</span>
+          </div>
+          <Button
+            className="w-full bg-neutral-100 text-neutral-800 hover:text-neutral-300"
+            variant="secondary"
+          >
+            Import
+          </Button>
+        </div>
       </div>
     </div>
   );

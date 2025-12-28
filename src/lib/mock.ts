@@ -7,7 +7,6 @@ export const recentProjects: Project[] = [
     path: "/users/placeholder/documents/dev-projects/prototype-voidcrate-ui",
     engineVersion: "UE 5.3",
     lastOpened: "2025-12-14T18:20:00Z",
-    createdAt: "2025-11-30T10:00:00Z",
     thumbnail: "https://picsum.photos/600/300?random=11",
   },
   {
@@ -16,7 +15,6 @@ export const recentProjects: Project[] = [
     path: "/users/placeholder/documents/dev-projects/forest-survival",
     engineVersion: "UE 5.2",
     lastOpened: "2025-12-13T21:45:00Z",
-    createdAt: "2025-11-18T09:12:00Z",
     thumbnail: "https://picsum.photos/600/300?random=12",
   },
   {
@@ -25,7 +23,6 @@ export const recentProjects: Project[] = [
     path: "/users/placeholder/documents/dev-projects/city-builder-sim",
     engineVersion: "UE 5.1",
     lastOpened: "2025-12-11T16:05:00Z",
-    createdAt: "2025-10-22T14:30:00Z",
     thumbnail: "https://picsum.photos/600/300?random=13",
   },
   {
@@ -34,7 +31,6 @@ export const recentProjects: Project[] = [
     path: "/users/placeholder/documents/dev-projects/shader-playground",
     engineVersion: "UE 5.3",
     lastOpened: "2025-12-09T23:10:00Z",
-    createdAt: "2025-12-01T19:40:00Z",
     thumbnail: "https://picsum.photos/600/300?random=14",
   },
   {
@@ -43,7 +39,6 @@ export const recentProjects: Project[] = [
     path: "/users/placeholder/documents/dev-projects/topdown-combat-proto",
     engineVersion: "UE 5.2",
     lastOpened: "2025-12-08T14:50:00Z",
-    createdAt: "2025-11-10T11:25:00Z",
     thumbnail: "https://picsum.photos/600/300?random=15",
   },
   {
@@ -52,7 +47,6 @@ export const recentProjects: Project[] = [
     path: "/users/placeholder/documents/dev-projects/cinematic-sequence-tests",
     engineVersion: "UE 5.3",
     lastOpened: "2025-12-07T20:30:00Z",
-    createdAt: "2025-10-28T17:10:00Z",
     thumbnail: "https://picsum.photos/600/300?random=16",
   },
   {
@@ -61,7 +55,6 @@ export const recentProjects: Project[] = [
     path: "/users/placeholder/documents/dev-projects/voxel-terrain-lab",
     engineVersion: "UE 5.1",
     lastOpened: "2025-12-06T12:15:00Z",
-    createdAt: "2025-10-15T08:40:00Z",
     thumbnail: "https://picsum.photos/600/300?random=17",
   },
   {
@@ -70,7 +63,6 @@ export const recentProjects: Project[] = [
     path: "/users/placeholder/documents/dev-projects/networked-lobby-test",
     engineVersion: "UE 5.3",
     lastOpened: "2025-12-05T22:05:00Z",
-    createdAt: "2025-11-05T15:55:00Z",
     thumbnail: "https://picsum.photos/600/300?random=18",
   },
 ];

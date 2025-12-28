@@ -18,8 +18,6 @@ export interface Asset {
   category: AssetCategory;
   tags: string[];
   size: number;
-  createdAt: string;
-  lastModified: string;
   thumbnail?: string;
   description?: string;
 }

@@ -24,7 +24,7 @@ import {
   Diamond,
 } from "lucide-react";
 
-import { assets } from "@/lib/mock";
+import { assets as initialAssets } from "@/lib/mock";
 import type {
   Asset,
   AssetType,
@@ -38,6 +38,7 @@ import { selectedProjectAtom } from "@/lib/store";
 import { useNavigate } from "react-router-dom";
 import { UELogo } from "@/components/icons";
 import AppHeader from "@/components/mangement-page-app-header";
+import { AddAssetDialog } from "@/components/add-asset-dialog";
 
 function AssetTypeSection({ activeType, onSelectType }: AssetTypeSectionProps) {
   const typeIconMap = {
@@ -146,6 +147,7 @@ export default function AssetManagementPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [project, setSelectedProject] = useAtom(selectedProjectAtom);
+  const [assets, setAssets] = useState<Asset[]>(initialAssets);
 
   const filteredAssets = assets.filter((a) => {
     const typeMatch = activeType === "All" || a.category === activeType;
@@ -218,10 +220,17 @@ export default function AssetManagementPage() {
                 <UELogo color="#fff" />
                 <span className="text-white">Open Engine</span>
               </Button>
-              <Button className="border-2 hover:border-[#800000] active:bg-neutral-400">
-                <Plus className="h-4 w-4" />
-                Add Asset
-              </Button>
+              <AddAssetDialog
+                onAddAsset={(asset) => {
+                  setAssets((prev) => [asset, ...prev]);
+                }}
+                trigger={
+                  <Button className="border-2 hover:border-[#800000] active:bg-neutral-400">
+                    <Plus className="h-4 w-4" />
+                    Add Asset
+                  </Button>
+                }
+              />
             </div>
           </header>
 

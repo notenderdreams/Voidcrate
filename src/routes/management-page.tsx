@@ -31,29 +31,13 @@ import type {
   AssetTypeSectionProps,
   CategorySectionProps,
 } from "@/lib/types";
-import Logo from "@/components/logo";
-import { getVersion } from "@/lib/version";
 import { AssetCard } from "@/components/asset-card";
 import { AssetDetailsPanel } from "@/components/asset-details-panel";
 import { useAtom } from "jotai";
 import { selectedProjectAtom } from "@/lib/store";
 import { useNavigate } from "react-router-dom";
 import { UELogo } from "@/components/icons";
-
-function AppHeader() {
-  const navigate = useNavigate();
-  return (
-    <div
-      onClick={() => {
-        navigate("/");
-      }}
-      className="flex text-xs items-baseline justify-start gap-1 hover:bg-neutral-800 rounded-md"
-    >
-      <Logo />
-      <span className="text-neutral-500">v{getVersion()}</span>
-    </div>
-  );
-}
+import AppHeader from "@/components/mangement-page-app-header";
 
 function AssetTypeSection({ activeType, onSelectType }: AssetTypeSectionProps) {
   const typeIconMap = {

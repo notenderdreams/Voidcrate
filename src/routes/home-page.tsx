@@ -1,22 +1,10 @@
 import { recentProjects } from "@/lib/mock";
 import { Button } from "@/components/ui/button";
-import {
-  UELogo,
-  PlusIcon,
-  PackageIcon,
-  SettingsIcon,
-} from "@/components/icons";
 import { getMostRecentProjects } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { selectedProjectAtom } from "@/lib/store";
-
-const actions = [
-  { label: "Open Projects", icon: UELogo },
-  { label: "Add Crate", icon: PlusIcon },
-  { label: "Browse Crates", icon: PackageIcon },
-  { label: "Settings", icon: SettingsIcon },
-];
+import { homePageActionsList } from "@/lib/constants";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -63,7 +51,7 @@ export default function HomePage() {
 
         {/* RIGHT — ACTIONS */}
         <div className="w-1/3 flex flex-col gap-2">
-          {actions.map(({ label, icon: Icon }) => (
+          {homePageActionsList.map(({ label, icon: Icon, url }) => (
             <Button
               key={label}
               variant="ghost"
@@ -75,6 +63,15 @@ export default function HomePage() {
                 rounded-lg
                 gap-3 px-1
               "
+              onClick={() => {
+                if (url) {
+                  navigate(url);
+                } else {
+                  console.log("Add Asset");
+                  // !TODO : Impl tauri
+                  //  create seperate function or hook for add asset
+                }
+              }}
             >
               <div className="p-4 bg-neutral-900 rounded-md">
                 <Icon width={48} height={42} />

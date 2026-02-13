@@ -36,7 +36,6 @@ import { AssetDetailsPanel } from "@/components/asset-details-panel";
 import { useAtom } from "jotai";
 import { selectedProjectAtom } from "@/lib/store";
 import { useNavigate } from "react-router-dom";
-import { UELogo } from "@/components/icons";
 import AppHeader from "@/components/mangement-page-app-header";
 import { AddAssetDialog } from "@/components/add-asset-dialog";
 
@@ -211,15 +210,6 @@ export default function AssetManagementPage() {
               />
             </div>
             <div className="flex gap-2  ">
-              <Button
-                className="bg-blue-600 border-2 hover:border-blue-600 active:bg-blue-950"
-                onClick={() => {
-                  console.log("Open Engine Called");
-                }}
-              >
-                <UELogo color="#fff" />
-                <span className="text-white">Open Engine</span>
-              </Button>
               <AddAssetDialog
                 onAddAsset={(asset) => {
                   setAssets((prev) => [asset, ...prev]);

@@ -3,3 +3,6 @@ install:
 
 run:
     bun tauri dev
+
+fmt:
+    cd src-tauri && cargo fmt
